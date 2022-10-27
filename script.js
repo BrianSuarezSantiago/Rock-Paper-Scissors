@@ -33,7 +33,8 @@ function playRound() {
 
     if(!userChoice.match(regex)) {
         alert("❌ Please, select a valid choice ❌");
-        exit();    // Stop the execution of the game
+        location.reload();    // Reloads the game in case of error instead of exiting
+        exit();    // Exits the input form to reload it again and ask for a choice to the user
     }
 
     // Treats the user's input to convert it to lowercase regardless of how it was entered and removes any spaces that were added
