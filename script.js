@@ -1,80 +1,132 @@
-let computerChoice;
-let playerScore = 0, computerScore = 0;
+let options = ["ROCK", "PAPER", "SCISSORS"];
 
-/**
- * Randomly generates a number between 0 and 2 representing 
- * Rock, Paper, Scissors respectively.
- * 
- * @param min - The minimum number that the computer can choose.
- * @param max - The maximum number that can be generated.
- */
-function getComputerChoice(min, max) {
-    computerChoice = Math.floor(Math.random() * (max + min + 1) + min);
+const rockBtn = document.getElementById("rock");
+const paperBtn = document.getElementById("paper");
+const scissorBtn = document.getElementById("scissors");
+const resultText = document.getElementById("result-text");
+const userImg = document.getElementById("user-img");
+const computerImg = document.getElementById("computer-img");
+const startBtn = document.getElementById("start_game");
+const usertext = document.getElementById("user-text");
+const computertext = document.getElementById("computer-text");
 
-    if(computerChoice == 0) {
-        computerChoice = "Rock";
-    } else if(computerChoice == 1) {
-        computerChoice = "Paper";
-    } else {
-        computerChoice = "Scissors";
+let userScore = 0;
+let computerScore = 0;
+
+rockBtn.addEventListener("click", () => {
+    playRound("ROCK");
+});
+
+paperBtn.addEventListener("click", () => {
+    playRound("PAPER");
+});
+
+scissorBtn.addEventListener("click", () => {
+    playRound("SCISSORS");
+});
+
+startBtn.addEventListener("click", () => {
+    start_game();
+});
+
+function start_game() {
+    userScore = 0;
+    computerScore = 0;
+
+    rockBtn.style.visibility = 'visible';
+    paperBtn.style.visibility = 'visible';
+    scissorBtn.style.visibility = 'visible';
+    startBtn.style.visibility = 'hidden';
+
+    usertext.innerHTML = "Welcome!";
+    usertext.innerHTML = "User: " + userScore;
+    computertext.innerHTML = "Computer: " + computerScore;
+}
+
+function getComputerChoice(options) {
+	return options[Math.floor(Math.random()*3)];
+}
+
+function roundResult(computerChoice,userChoice){
+    let computer_win = false;
+    let user_win = false;
+
+    if(userChoice == computerChoice) {
+        resultText.innerHTML = "Tie";
+    } else if(userChoice == "ROCK") {
+        if(computerChoice == "PAPER") {
+            computer_win = true;  
+        } else if(computerChoice == "SCISSORS") {
+            user_win=true;
+        }
+    } else if(userChoice == "PAPER") {
+        if(computerChoice == "SCISSORS") {
+            computer_win = true;
+        } else if(computerChoice == "ROCK") {
+            user_win = true;
+        }
+    } else if(userChoice == "SCISSORS") {
+        if(computerChoice == "ROCK") {
+            computer_win = true;
+        } else if(computerChoice == "PAPER") {
+            user_win = true;
+        }
+    }
+   
+    if(computer_win) {
+        computerScore += 1;
+        resultText.innerHTML = "You loose";
+        computertext.innerHTML = "Computer: " + computerScore; 
+    } else if(user_win) {
+        userScore += 1;
+        resultText.innerHTML = "You win";
+        usertext.innerHTML = "User: " + userScore;
     }
 }
 
-/**
- * Plays a single round of the game and print the winner ofthe round.
- */
-function playRound() {
-    getComputerChoice(0, 2);
+function playRound(userChoice) {
+    computerChoice = getComputerChoice(options);
+     
+    switch(userChoice) {
+        case "ROCK":
+            userImg.src = "assets/images/Rock.png";
+        break;
 
-    let userChoice = String(prompt("Choose between Rock-Paper-Scissors"));
+        case "PAPER":
+            userImg.src = "assets/images/Paper.png";
+        break;
 
-    // Verifies that the user enters a valid option
-    const regex = /^[a-zA-Z]+$/;
-
-    if(!userChoice.match(regex)) {
-        alert("❌ Please, select a valid choice ❌");
-        location.reload();    // Reloads the game in case of error instead of exiting
-        exit();    // Exits the input form to reload it again and ask for a choice to the user
+        case "SCISSORS":
+            userImg.src = "assets/images/Scissors.png";
+        break;
     }
 
-    // Treats the user's input to convert it to lowercase regardless of how it was entered and removes any spaces that were added
-    playerSelection =  userChoice.charAt(0).toUpperCase() + userChoice.slice(1).toLocaleLowerCase();
-    computerSelection = computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1).toLocaleLowerCase();
+    switch(computerChoice) {
+        case "ROCK":
+            computerImg.src = "assets/images/Rock.png";
+        break;
 
-    if(playerSelection === computerSelection) {
-        alert(`You select "${playerSelection}" and the computer selects "${computerSelection}" \n TIE!!`);
-    } else if((playerSelection === "Rock") && (computerSelection === "Scissors")) {
-        alert(`You select "${playerSelection}" and the computer selects "${computerSelection}" \n YOU WON!!`);
-        playerScore++;
-    } else if((playerSelection === "Paper") && (computerSelection === "Rock")) {
-        alert(`You select "${playerSelection}" and the computer selects "${computerSelection}" \n YOU WON!!`);
-        playerScore++;
-    } else if((playerSelection === "Scissors") && (computerSelection === "Paper")) {
-        alert(`You select "${playerSelection}" and the computer selects "${computerSelection}" \n YOU WON!!`);
-        playerScore++;
+        case "PAPER":
+            computerImg.src = "assets/images/Paper.png";
+        break;
+
+        case "SCISSORS":
+            computerImg.src = "assets/images/Scissors.png";
+        break;
+    }
+
+    if(userScore < 3 && computerScore < 3) {
+        roundResult(computerChoice, userChoice);
     } else {
-        alert(`You select "${playerSelection}" and the computer selects "${computerSelection}" \n YOU LOSE!!`);
-        computerScore++;
-    }
+        if(userScore === 3) {
+            resultText.innerHTML = "Winner:User";
+        } else {
+            resultText.innerHTML = "Winner:Computer";
+        }
+
+        startBtn.style.visibility = 'visible';
+        rockBtn.style.visibility = 'hidden';
+        paperBtn.style.visibility = 'hidden';
+        scissorBtn.style.visibility = 'hidden';   
+    }   
 }
-
-// Check the winner of the 5 played rounds
-const checkWinner = () => {
-    if(playerScore === computerScore) {
-        alert("Tie!! 🔖");
-    } else if(playerScore > computerScore) {
-        alert("You win!! 🥳");
-    } else {
-        alert("Computer win!! 😔");
-    }
-};
-
-// Plays 5 rounds of the game and declares the winner
-const game = () => {
-    for(let i = 0; i < 5; i++) {
-        playRound();
-    }
-    checkWinner();
-};
-
-game();    // Game initialization
