@@ -89,29 +89,29 @@ function playRound(userChoice) {
      
     switch(userChoice) {
         case "ROCK":
-            userImg.src = "assets/images/Rock.png";
+            userImg.src = "./assets/images/Rock.png";
         break;
 
         case "PAPER":
-            userImg.src = "assets/images/Paper.png";
+            userImg.src = "./assets/images/Paper.png";
         break;
 
         case "SCISSORS":
-            userImg.src = "assets/images/Scissors.png";
+            userImg.src = "./assets/images/Scissors.png";
         break;
     }
 
     switch(computerChoice) {
         case "ROCK":
-            computerImg.src = "assets/images/Rock.png";
+            computerImg.src = "./assets/images/Rock.png";
         break;
 
         case "PAPER":
-            computerImg.src = "assets/images/Paper.png";
+            computerImg.src = "./assets/images/Paper.png";
         break;
 
         case "SCISSORS":
-            computerImg.src = "assets/images/Scissors.png";
+            computerImg.src = "./assets/images/Scissors.png";
         break;
     }
 
@@ -119,9 +119,9 @@ function playRound(userChoice) {
         roundResult(computerChoice, userChoice);
     } else {
         if(userScore === 3) {
-            resultText.innerHTML = "Winner:User";
+            resultText.innerHTML = "Winner: User";
         } else {
-            resultText.innerHTML = "Winner:Computer";
+            resultText.innerHTML = "Winner: Computer";
         }
 
         startBtn.style.visibility = 'visible';
